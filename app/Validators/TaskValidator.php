@@ -13,7 +13,6 @@ class TaskValidator
 
     public static function createRules()
     {
-
         return [
             "title" => "required",
             "date" => "required",
@@ -30,5 +29,15 @@ class TaskValidator
             "priority" => ["nullable", Rule::in(self::$validPriorities)],
             "category" => ["nullable", Rule::in(self::$validCategories)]
         ];
+    }
+
+    public static function getCategories()
+    {
+        return self::$validCategories;
+    }
+
+    public static function getPriorities()
+    {
+        return self::$validPriorities;
     }
 }

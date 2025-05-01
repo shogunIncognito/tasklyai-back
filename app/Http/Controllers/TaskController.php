@@ -12,7 +12,7 @@ class TaskController extends Controller
 {
     public function getUserTasks(Request $request)
     {
-        $tasks = Task::where('id', $request->user()->id)->get();
+        $tasks = Task::where('user_id', $request->user()->id)->get();
         return response()->json($tasks);
     }
 
@@ -20,16 +20,16 @@ class TaskController extends Controller
     {
         $rules = TaskValidator::createRules();
 
-        // get json with ai prompt
-        $task = AIService::promptTaskToJson($request->all());
-        // get json with ai prompt
+        // get json task with ai prompt
+        $task = AIService::promptTaskToJson($request->prompt);
 
-        $validator = Validator::make([], $rules);
+        $validator = Validator::make($task, $rules);
 
         if ($validator->fails()) {
             return response()->json([
-                "message" => "error validating data",
-                "errors" => $validator->errors()
+                "message" => "error validating data prompt malformed",
+                "errors" => $validator->errors(),
+                "task" => $task
             ], 400);
         }
 
@@ -37,7 +37,8 @@ class TaskController extends Controller
             "title" => $task['title'],
             "date" => $task['date'],
             "category" => $task['category'],
-            "priority" => $task['priority']
+            "priority" => $task['priority'],
+            "user_id" => $request->user()->id
         ]);
 
         $newTask->save();
@@ -47,7 +48,13 @@ class TaskController extends Controller
 
     public function updateTask(Request $request, $id)
     {
-        $task = Task::findOrFail($id);
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json([
+                "message" => "task not found"
+            ], 404);
+        }
 
         $rules = TaskValidator::updateRules();
         $validator = Validator::make($request->all(), $rules);
@@ -66,12 +73,18 @@ class TaskController extends Controller
 
     public function deleteTask($id)
     {
-        $task = Task::findOrFail($id);
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json([
+                "message" => "task not found"
+            ], 404);
+        }
 
         $task->delete();
 
         return response()->json([
-            "task deleted"
+            "message" => "task deleted"
         ]);
     }
 }
