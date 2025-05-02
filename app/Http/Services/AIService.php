@@ -23,11 +23,10 @@ class AIService
                     Categorías válidas: " . implode(', ', $categories) .
                         " Prioridades válidas: " . implode(', ', $priorities) .
                         " Al principio del prompt se indica que fecha es hoy la idea es que la pongas en fecha ISOString, es decir algo como esto '2025-05-02', entonces el 'date' colócalo en base a eso
-                          ej: date: 'Mayo 1, 2025' entonces '2025-05-01' si en el texto enviado se indica 'mañana' colocas '2025-05-02' haciéndolo en base al dia actual
-                          si no se indica fecha entonces colocar la fecha de hoy.
-                          Reformula el texto como un título breve, claro y profesional que resuma la tarea. Evita repetir el texto original tal cual y usa un lenguaje directo.                         
-                         Escoge la categoría y la prioridad mas adecuada a la tarea, si ninguna lo es, deja 'Personal' por defecto para categoria y en prioridad deja 'Normal'
-
+                    ej: date: 'Mayo 1, 2025' entonces '2025-05-01' si en el texto enviado se indica 'mañana' colocas '2025-05-02' haciéndolo en base al dia actual
+                    si no se indica fecha entonces colocar la fecha de hoy.
+                    Reformula el texto como un título breve, claro y profesional que resuma la tarea. Evita repetir el texto original tal cual y usa un lenguaje directo.                         
+                    Escoge la categoría y la prioridad mas adecuada a la tarea, si ninguna lo es, deja 'Personal' por defecto para categoria y en prioridad deja 'Normal'
                     Texto: " . $prompt .
                         " Respuesta: "
                 ]
